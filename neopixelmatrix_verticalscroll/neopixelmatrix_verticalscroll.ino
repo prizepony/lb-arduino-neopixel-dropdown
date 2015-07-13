@@ -20,6 +20,7 @@
 #define MATRIX_HEIGHT   16
 
 #define AUDIO_OUT_PIN    9
+#define OSC_OUT_PIN      5
 
 #define DEFAULT_SPEED   250
 #define NUM_OBSTACLES    10
@@ -50,6 +51,7 @@ void setup() {
   matrix.setBrightness(20);
 
   pinMode(AUDIO_OUT_PIN, OUTPUT);
+  pinMode(OSC_OUT_PIN, OUTPUT);
 
   // initialize obstacles
   initializeObstacles();
@@ -74,6 +76,7 @@ void loop() {
 
   updateMatrix();
 
+  digitalWrite(OSC_OUT_PIN, LOW);
   if (game_status == GAME_OVER) {
     resetGame();
   } else if (game_status == GAME_WON && finishline.ypos > (MATRIX_HEIGHT + 7)) {
@@ -88,6 +91,8 @@ void updateElements()
   // update obstacles and finish line
   if (millis() - lastMove > current_speed)
   {
+    digitalWrite(OSC_OUT_PIN, HIGH);
+    
     for (int i = 0; i < NUM_OBSTACLES; i++) {
       obstacles[i].ypos++;
     }
